@@ -16,11 +16,14 @@ def chaotic_calculate(expr):
 
         # Check for algebra commands
         expr_lower = expr.lower()
-        if expr_lower.startswith("solve"):
-            # Example: solve(x + 2 - 5)
-            to_solve = expr[5:].strip()
-            solution = solve(sympify(to_solve))
-            result = solution
+elif expr_lower.startswith("solve"):
+    to_solve = expr[5:].strip()
+    # If the input looks like a system with a tuple of symbols
+    if to_solve.startswith("[") and "(" in to_solve:
+        result = eval(f"solve({to_solve})", {"__builtins__": None}, globals())
+    else:
+        result = solve(sympify(to_solve))
+
         elif expr_lower.startswith("simplify"):
             to_simplify = expr[8:].strip()
             result = simplify(sympify(to_simplify))
